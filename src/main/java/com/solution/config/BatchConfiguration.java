@@ -30,13 +30,19 @@ import com.solution.processor.ReportItemProcessor;
 @EnableBatchProcessing
 public class BatchConfiguration {
 	
+	@Value("${step.orig}")
+	private String orig;
+	
 	@Value("${step.dest}")
 	private String dest;
+	
 	
     @Bean
     public ItemReader<Report> reader() {
         FlatFileItemReader<Report> reader = new FlatFileItemReader<Report>();
-        reader.setResource(new ClassPathResource("files/input.csv"));
+       // reader.setResource(new ClassPathResource("files/input.csv"));
+    	reader.setResource(new FileSystemResource(new File(orig)));
+        
         reader.setLineMapper(new DefaultLineMapper<Report>() {{
             setLineTokenizer(new DelimitedLineTokenizer() {{
                 setNames(new String[] {"refId", "name", "age" });
@@ -51,6 +57,7 @@ public class BatchConfiguration {
     public ItemWriter<Report> writer() {
     	FlatFileItemWriter<Report> writer = new FlatFileItemWriter<Report>();
     	writer.setResource(new FileSystemResource(new File(dest)));
+    	//writer.setResource(new FileSystemResource(new File(dest2)));
     	DelimitedLineAggregator<Report> delLineAgg = new DelimitedLineAggregator<Report>();
     	delLineAgg.setDelimiter(",");
     	BeanWrapperFieldExtractor<Report> fieldExtractor = new BeanWrapperFieldExtractor<Report>();

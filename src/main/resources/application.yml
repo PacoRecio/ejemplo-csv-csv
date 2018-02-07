@@ -1,2 +1,3 @@
 step:
+  orig: C:\input.csv
   dest: .//csv//report.csv
