@@ -35,6 +35,7 @@ public class BatchConfiguration {
 	
 	@Value("${step.dest}")
 	private String dest;
+	private String dest2;
 	
 	
     @Bean
